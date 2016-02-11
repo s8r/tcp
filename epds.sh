@@ -3,11 +3,6 @@ case "$1" in
 "") echo "Extract PDs from tab or comma delimited input. Usage: ${0##*/} <file>"; exit 1;;
 esac
 echo "extract $1 to comma-delimited rawpds.csv"
-# 
-# A script to create rawpds.csv, a comma-delimited list of polling district codes with the LAD name and codes annexed.
-# This must then be edited by hand to add the constituency name as a further column for each PDC as pds.csv
-# after which a snapshot register can be imported to common format.
-#
 time {
 delimiter="\t"
 s=$(head -n 1 "$1")
