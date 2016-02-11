@@ -1,26 +1,27 @@
 #!/bin/bash
 case "$1" in
-"") echo "test awk. Usage: ${0##*/} <full register Halarose EROS>"; exit 1;;
+"") echo "Usage: ${0##*/} <full register from Halarose EROS>"; exit 1;;
 esac
-PDFILE="pds.csv"
-echo "pp50 extract"
+
+echo  ${0##*/} "$1 data extract started"
 time {
+head -n 1 $1 |
+grep Status |
+#type 1 if there's a Status else 0.
+wc -l >type
+
 # take out the headers
-time tail -n +3 $1 |
-#grep -v ',"U",' $1 | \
-#grep -v 'Elector Number' | \
-#grep -v 'Date Published' | \
-# drop Microsoft linefeeds
-sed $'s/\r$//' |
-# keep the comma delimiters we want
-sed 's/\"\,\"/\jwhrg/g' |
-# drop the leading quote
-sed 's/^\"//' |
-# drop the trailing quote
-sed 's/\"$//' |
-# drop all content commas
-sed 's/\,/jwhrg/g' |
-# put back the delimiters as tabs
-sed 's/jwhrg/\t/g' |
-awk -v p="pds.csv" -f ../titlecase2.awk -f ../b5fullpp.awk  >importedfullregister.csv
+grep -v 'Franchise Flag' "$1" |
+grep -v 'Date Published' |
+grep -v 'PostCode' |
+sed 's/\xa0/ /g' >awk1.tmp
+php ../maketab.php <awk1.tmp >awk2.tmp
+awk -v p="pds.csv" -f ../titlecase2.awk -f ../b5fullpp.awk awk2.tmp |
+sed 's/\.//g' >importedfullregister.csv
+wc -l importedfullregister.csv
+wc -l pds.csv
+grep BLANK importedfullregister.csv
+../constituencies.sh importedfullregister.csv
+echo "wc -l full.csv"
+rm awk?.tmp
 }
