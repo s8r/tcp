@@ -2,8 +2,8 @@
 # invoke awk -v p="pds.csv" -f ../titlecase.awk -f ../b1fullu.awk infile >outfile
 
 BEGIN {
-  FS="," 
-  OFS=","
+  FS="\t" 
+  OFS="\t"
   while (getline < "pds.csv")
   {
     split($0,ft,",");
@@ -100,5 +100,3 @@ yyyymmcreated, yyyymmchanged, yyyymmdeleted, updateyyyymm, updatecramde, uprn, c
 # then the Deletes, unstamped so grep can get rid of them.
 # the final sort -u will do all the creates, amends and deletes for the year.
 #
-
-
