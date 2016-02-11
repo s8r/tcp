@@ -5,23 +5,24 @@ esac
 PDFILE="pds.csv"
 echo "pp18 extract"
 time {
-#grep -v ',"U",' $1 |
-#grep -v 'Elector Number' |
-#grep -v 'Date Published' |
-# drop Microsoft linefeeds
-sed $'s/\r$//' "$1" |
-# keep the comma delimiters we want
-sed 's/\"\,\"/\jwhrg/g' |
-# drop the leading quote
-sed 's/^\"//' |
-# drop the trailing quote
-sed 's/\"$//' |
-# either comma-delimited
-sed 's/\,/\t/g' |
-# or quote-comma delimited, put back the delimiters as tabs
-sed 's/jwhrg/\t/g' |
-awk -v p="pds.csv" -f ../titlecase2.awk -f ../b5upp.awk  >importedupdate.csv
-sort --field-separator=',' -k1,5 -k40 importedfullregister.csv importedupdate.csv |
-sort -u --field-separator=',' -k1,5 |
-grep -v ',1 Delete 00' >importedcurrentregister.csv
+grep -v 'Franchise Flag' $1 |
+grep -v 'Monthly Additions' |
+grep -v $'^"PD"' |
+grep -v 'Ref:' |
+grep -v 'Date Published' |
+sed 's/\xa0/ /g' |
+php ../maketab.php |
+awk -v p="pds.csv" -f ../titlecase2.awk -f ../b5upp.awk |
+sed 's/\.//g' >importedupdateall.csv
+wc -l importedupdateall.csv
+wc -l pds.csv
+sort -t$'\t' -k1,4 -k5,5n -k40 importedfullregister.csv importedupdateall.csv |
+# The next line retains just one command from the merged file.
+# In priority order, this is by type 1: delete, 2: amend, 3: create and 9: original full register entry.
+# If there are multiple commands of the same type, the most recent takes priority (ie. by descending month)
+sort -u -t$'\t' -k1,4 -k5,5n |
+grep -v '1 Delete 00' >importedcurrentregister.csv
+# now reconcile the update
+../reconciliation.sh
 }
+# and cycle the old current in place of the full for subsequent months
