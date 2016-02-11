@@ -4,12 +4,14 @@ case "$1" in
 esac
 echo processing all updates...
 time {
-../a4up14 "$1" all
-sort --field-separator=',' -k1,4 -k5,5n -k40 importedfullregister.csv importedupdateall.csv |
-sort -u --field-separator=',' -k1,4 -k5,5n |
-grep -v ',1 Delete 00' >importedcurrentregister.csv
+../a4up14.sh "$1" all
+sort -t$'\t' -k1,4 -k5,5n -k40 importedfullregister.csv importedupdateall.csv |
+# The next line retains just one command from the merged file.
+# In priority order, this is by type 1: delete, 2: amend, 3: create and 9: original full register entry.
+# If there are multiple commands of the same type, the most recent takes priority (ie. by descending month)
+sort -u -t$'\t' -k1,4 -k5,5n |
+grep -v '1 Delete 00' >importedcurrentregister.csv
 
-#srm -sr importedupdateall.csv
-#srm -sr i1.tmp
-#srm -sr i2.tmp
+../reconciliation.sh
 }
+# and cycle the old current in place of the full for subsequent months
