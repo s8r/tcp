@@ -1,11 +1,11 @@
 
 function surnamepart(string) {
-# a port that might need an uppercase first letter, and another again after Mc or O'
+# a part that might need an uppercase first letter, and another again after Mc or O'
     if (index(" de di von ",string))
       return string
     else {
       string = toupper(substr(string, 1, 1)) substr(string,2)
-      if ((substr(string, 1, 2) == "Mc") || (substr(string, 1, 2) == "O'"))
+      if ((substr(string, 1, 2) == "Mc") || (substr(string, 1, 2) == "O`") || (substr(string, 1, 2) == "O'") || (substr(string, 1, 2) == "D'")  || (substr(string, 1, 2) == "D`"))
 	string = substr(string,1,2) toupper(substr(string, 3, 1)) substr(string,4)
     }
     return string
@@ -46,3 +46,6 @@ function titlecase(string) {
     s = s "-" spart(d[i])
   return s
 }
+
+
+# consider fullstops and two-letter initials together.
