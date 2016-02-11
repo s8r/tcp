@@ -3,7 +3,7 @@
 
 BEGIN {
   FS="\t" 
-  OFS=","
+  OFS="\t"
   while (getline < p)
   {
     split($0,ft,",")
@@ -89,7 +89,7 @@ if (type == 1) {
   split($7,ft," ");
   electorforename = ft[1]
   electorinitials = ft[2] ft[3] ft[4] ft[5] ft[6] 
-  electorsurname = $6
+  electorsurname = surname($6)
   addresspostcode = $8
   address1 = $9
   address2 = $10
@@ -102,7 +102,7 @@ else {
   split($6,ft," ");
   electorforename = ft[2]
   electorinitials = ft[3] ft[4] ft[5] ft[6] ft[7] 
-  electorsurname = ft[1]
+  electorsurname = surname(ft[1])
   addresspostcode = $7
   address1 = $8
   address2 = $9
@@ -114,6 +114,14 @@ else {
 control = "9 Full register entry"
 if (enola != "") {
 print enola, enoc, enopd, eno, enosuffix,
+flags, optout, electortitle, electorforename, electorinitials, electorsurname, electorsuffix, electorattaindate, electordob,
+addressprefix, addressnumber, addressstreetname, addresspostcode,
+address1, address2, address3, address4, address5, address6, address7, address8, address9,
+faddress1, faddress2, faddress3, faddress4, faddress5, faddress6,
+yyyymmcreated, yyyymmchanged, yyyymmdeleted, updateyyyymm, updatecramde, uprn, control
+}
+else {
+  print "BLANK!", enoc, enopd, eno, enosuffix,
 flags, optout, electortitle, electorforename, electorinitials, electorsurname, electorsuffix, electorattaindate, electordob,
 addressprefix, addressnumber, addressstreetname, addresspostcode,
 address1, address2, address3, address4, address5, address6, address7, address8, address9,
