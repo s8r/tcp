@@ -2,8 +2,8 @@
 # invoke awk -v p="pds.csv" -f ../titlecase.awk -f ../b1upu.awk infile >outfile
 
 BEGIN {
-  FS="," 
-  OFS=","
+  FS="\t" 
+  OFS="\t"
   while (getline < "pds.csv")
   {
     split($0,ft,",");
@@ -104,14 +104,4 @@ addressprefix, addressnumber, addressstreetname, addresspostcode,
 address1, address2, address3, address4, address5, address6, address7, address8, address9,
 faddress1, faddress2, faddress3, faddress4, faddress5, faddress6,
 yyyymmcreated, yyyymmchanged, yyyymmdeleted, updateyyyymm, updatecramde, uprn, actx
-
-
-
-
-
-
-
 }
-
-
-
