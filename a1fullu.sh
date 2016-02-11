@@ -5,18 +5,17 @@ esac
 PDFILE="pds.csv"
 time {
 # take out the headers
-grep -v ',"U",' $1 |
-# drop Microsoft linefeeds
-sed $'s/\r$//' |
-# keep the comma delimiters we want
-sed 's/\"\,\"/\jwhrg/g' |
-# drop the leading quote
-sed 's/^\"//' |
-# drop the trailing quote
-sed 's/\"$//' |
-# drop all content commas
-sed 's/\,//g' |
-# put back the delimiters
-sed 's/jwhrg/\,/g' |
-awk -v p="pds.csv" -f ../titlecase2.awk -f ../b1fullu.awk >importedfullregister.csv
+grep -v '","U","' $1 |
+grep -v 'Franchise Flag' |
+grep -v 'Date Published' |
+grep -v 'PostCode' |
+sed 's/\xa0/ /g' |
+php ../maketab.php |
+awk -v p="pds.csv" -f ../titlecase2.awk -f ../b1fullu.awk |
+sed 's/\.//g' >importedfullregister.csv
+wc -l importedfullregister.csv
+wc -l pds.csv
+grep BLANK importedfullregister.csv
+../constituencies.sh importedfullregister.csv
+echo "wc -l full.csv"
 }
