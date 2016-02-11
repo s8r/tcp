@@ -1,9 +1,9 @@
 # Takes an update Halarose EROS file
-# invoke awk -v p="pds.csv" -f ../titlecase.awk -f ../b5fullu.awk infile >outfile
+# invoke awk -v p="pds.csv" -f ../titlecase.awk -f ../b5fuppu.awk infile >outfile
 
 BEGIN {
   FS="\t" 
-  OFS=","
+  OFS="\t"
   while (getline < "pds.csv")
   {
     split($0,ft,",");
